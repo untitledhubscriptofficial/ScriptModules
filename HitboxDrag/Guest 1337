@@ -1,0 +1,85 @@
+--open source cuz not mine and edited by chatgpt
+local Players = game:GetService('Players')
+local Player = Players.LocalPlayer
+
+local function RunScript()
+task.wait(2)
+    local Humanoid, Animator, HumanoidRootPart
+    local AttackAnimations = {
+        "rbxassetid://96959123077498", -- milestone 4
+        "rbxassetid://72722244508749"  -- default
+    }
+
+    local RNG = Random.new()
+
+    local function InitializeCharacter()
+        local Character = Player.Character or Player.CharacterAdded:Wait()
+        Humanoid = Character:WaitForChild("Humanoid")
+        Animator = Humanoid:WaitForChild("Animator")
+        HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+    end
+
+    InitializeCharacter()
+
+    Player.CharacterAdded:Connect(function()
+        InitializeCharacter()
+    end)
+
+    a62962936297382=game:GetService('RunService').Heartbeat:Connect(function()
+        if not HumanoidRootPart or not hithoxdragtech then
+            return
+        end
+
+        local Playing = false
+        for _, v in Humanoid:GetPlayingAnimationTracks() do
+            if table.find(AttackAnimations, v.Animation.AnimationId) then
+                Playing = true
+            end
+        end
+
+        if not Playing then return end
+
+        local Target
+        local NearestDist = 400
+
+        local function loop(t)
+            for _, v in t do
+                if v == Player.Character or not v:FindFirstChild("HumanoidRootPart") then
+                    continue
+                end
+
+                local Dist = (v.HumanoidRootPart.Position - HumanoidRootPart.Position).Magnitude
+                if Dist < NearestDist then
+                    NearestDist = Dist
+                    Target = v
+                end
+            end
+        end
+
+        loop(workspace:WaitForChild("Players"):WaitForChild("Killers"):GetChildren())
+        loop(workspace.Map:FindFirstChild("NPCs", true):GetChildren())
+
+        if not Target then return end
+
+        local OldVelocity = HumanoidRootPart.Velocity
+        local NeededVelocity = 
+        (Target.HumanoidRootPart.Position + Vector3.new(
+            RNG:NextNumber(-1.5, 1.5),
+            0,
+            RNG:NextNumber(-1.5, 1.5)
+        ) + (Target.HumanoidRootPart.Velocity * (Player:GetNetworkPing() * 1.25)) 
+            - HumanoidRootPart.Position
+        ) / (Player:GetNetworkPing() * 2)
+
+        HumanoidRootPart.Velocity = NeededVelocity
+        game:GetService('RunService').RenderStepped:Wait()
+        HumanoidRootPart.Velocity = OldVelocity
+    end)
+end
+
+Player.CharacterAdded:Connect(function()
+if a62962936297382 then
+a62962936297382:Disconnect() 
+end
+    RunScript()
+end)
