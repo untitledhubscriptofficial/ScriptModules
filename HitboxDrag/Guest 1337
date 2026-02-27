@@ -1,4 +1,3 @@
---open source cuz not mine and edited by chatgpt
 local Players = game:GetService('Players')
 local Player = Players.LocalPlayer
 
@@ -32,7 +31,7 @@ task.wait(2)
 
         local Playing = false
         for _, v in Humanoid:GetPlayingAnimationTracks() do
-            if table.find(AttackAnimations, v.Animation.AnimationId) then
+            if table.find(AttackAnimations, v.Animation.AnimationId) and (v.TimePosition / v.Length > 0.5) then
                 Playing = true
             end
         end
@@ -62,11 +61,11 @@ task.wait(2)
         if not Target then return end
 
         local OldVelocity = HumanoidRootPart.Velocity
-        local NeededVelocity = 
+       local NeededVelocity = 
         (Target.HumanoidRootPart.Position + Vector3.new(
-            RNG:NextNumber(-1.5, 1.5),
+            RNG:NextNumber(0.1,0.1),
             0,
-            RNG:NextNumber(-1.5, 1.5)
+            RNG:NextNumber(0.1,0.1)
         ) + (Target.HumanoidRootPart.Velocity * (Player:GetNetworkPing() * 1.25)) 
             - HumanoidRootPart.Position
         ) / (Player:GetNetworkPing() * 2)
